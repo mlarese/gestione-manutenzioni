@@ -34,4 +34,17 @@ public class TecnicoController {
         return tecnicoService.save(request);
     }
 
+    // PUT http://localhost:8080/api/tecnici/1
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Tecnico modify(@PathVariable Long id, @RequestBody TecnicoRequest request) {
+        return tecnicoService.modify(id, request);
+    }
+
+    // DELETE http://localhost:8080/api/tecnici/1
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        tecnicoService.delete(id);
+    }
 }

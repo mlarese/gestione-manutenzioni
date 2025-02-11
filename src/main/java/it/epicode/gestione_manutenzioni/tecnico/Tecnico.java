@@ -23,7 +23,10 @@ public class Tecnico {
     // nome cognome matricola
     private String nome;
     private String cognome;
+    @Column(unique = true)
     private String matricola;
+    @Column(unique = true)
+    private String codiceFiscale;
     private Boolean attivo=true;
 
     @ManyToOne

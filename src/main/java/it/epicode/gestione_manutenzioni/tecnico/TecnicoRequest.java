@@ -11,4 +11,5 @@ public class TecnicoRequest {
     private String nome;
     private String cognome;
     private String matricola;
+    private String codiceFiscale;
 }

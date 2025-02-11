@@ -19,10 +19,21 @@ public class TecnicoService {
         return tecnicoRepository.findAll();
     }
 
+    public Tecnico modify(Long id, TecnicoRequest request) {
+        Tecnico tecnico = findById(id);
+        BeanUtils.copyProperties(request, tecnico);
+        tecnicoRepository.save(tecnico);
+        return tecnico;
+    }
+
     //metodo per inserire un dipendente
     public CreateResponse save(TecnicoRequest request) {
         if(tecnicoRepository.existsByMatricola(request.getMatricola())){
             throw new EntityExistsException("Tecnico già esistente");
+        }
+
+        if(tecnicoRepository.existsByCodiceFiscale(request.getCodiceFiscale())){
+            throw new EntityExistsException("Tecnico già esistente: controllo su codice fiscale");
         }
 
         Tecnico tecnico = new Tecnico();
@@ -44,5 +55,9 @@ public class TecnicoService {
         return tecnicoRepository.findById(id).get();
     }
 
+    public void delete(Long id) {
+        Tecnico tecnico = findById(id);
+        tecnicoRepository.deleteById(id);
+    }
 
 }
