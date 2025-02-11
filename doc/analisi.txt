@@ -1,0 +1,5 @@
+gestire gli interventi di manutenzione di un tecnico
+
+tecnico id nome cognome matricola interventi
+intervento id data numero tecnico descrizione
+azienda id nome indirizzo telefono tecnici interventi
