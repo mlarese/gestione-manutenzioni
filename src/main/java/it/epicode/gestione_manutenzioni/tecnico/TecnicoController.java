@@ -15,16 +15,17 @@ public class TecnicoController {
 
     @GetMapping
     // GET http://localhost:8080/api/tecnici
+
     @ResponseStatus(HttpStatus.OK)
-    public List<Tecnico> findAll() {
+    public List<TecnicoResponse> findAll() {
         return tecnicoService.findAll();
     }
 
     // GET http://localhost:8080/api/tecnici/1
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Tecnico findById(@PathVariable Long id) {
-        return tecnicoService.findById(id);
+    public TecnicoDettaglioResponse findById(@PathVariable Long id) {
+        return tecnicoService.findTecnicoResponseById(id);
     }
 
     // POST http://localhost:8080/api/tecnici

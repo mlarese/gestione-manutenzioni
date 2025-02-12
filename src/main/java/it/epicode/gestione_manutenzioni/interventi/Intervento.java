@@ -1,5 +1,6 @@
 package it.epicode.gestione_manutenzioni.interventi;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.epicode.gestione_manutenzioni.aziende.Azienda;
 import it.epicode.gestione_manutenzioni.tecnico.Tecnico;
 import jakarta.persistence.*;
@@ -22,8 +23,12 @@ public class Intervento {
     // data numero tecnico descrizione
     private LocalDate data;
     private String numero;
+    private String descrizione;
+    @JsonIgnoreProperties("interventi")
     @ManyToOne
     Azienda azienda;
+
+    @JsonIgnoreProperties({"interventi"})
     @ManyToOne
     private Tecnico tecnico;
 

@@ -1,5 +1,6 @@
 package it.epicode.gestione_manutenzioni.aziende;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import it.epicode.gestione_manutenzioni.interventi.Intervento;
 import it.epicode.gestione_manutenzioni.tecnico.Tecnico;
 import jakarta.persistence.*;
@@ -26,8 +27,11 @@ public class Azienda {
     private String indirizzo;
     private String telefono;
     @OneToMany
+    @JsonIgnoreProperties("azienda")
     private Set<Tecnico> tecnici = new HashSet<>();
+
     @OneToMany(mappedBy = "azienda")
+    @JsonIgnoreProperties("azienda")
     private Set<Intervento> interventi = new HashSet<>();
 
 }

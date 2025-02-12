@@ -6,6 +6,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,8 +16,11 @@ public class TecnicoService {
     private final TecnicoRepository tecnicoRepository;
 
     // metodo per trovare tutti i dipendenti
-    public List<Tecnico> findAll() {
-        return tecnicoRepository.findAll();
+    public List<TecnicoResponse> findAll() {
+        // trasforma la lista di tecnici recuperata con findAll
+        // in una lista di TecnicoResponse usando il metodo che abbia creato nel service
+        List<TecnicoResponse> response =  tecnicoResponseListFromEntityList(tecnicoRepository.findAll());
+        return response;
     }
 
     public Tecnico modify(Long id, TecnicoRequest request) {
@@ -36,9 +40,7 @@ public class TecnicoService {
             throw new EntityExistsException("Tecnico già esistente: controllo su codice fiscale");
         }
 
-        Tecnico tecnico = new Tecnico();
-        BeanUtils.copyProperties(request, tecnico);
-        tecnicoRepository.save(tecnico);
+        Tecnico tecnico = tecnicoFromRequest(request);
 
         CreateResponse response = new CreateResponse();
         BeanUtils.copyProperties(tecnico, response);
@@ -55,9 +57,44 @@ public class TecnicoService {
         return tecnicoRepository.findById(id).get();
     }
 
+    @Transactional
+    public TecnicoDettaglioResponse findTecnicoResponseById(Long id){
+        if(!tecnicoRepository.existsById(id)){
+            throw new EntityNotFoundException("Tecnico non trovato");
+        }
+
+        Tecnico tecnico = tecnicoRepository.findById(id).get();
+
+        TecnicoDettaglioResponse response = new TecnicoDettaglioResponse();
+        BeanUtils.copyProperties(tecnico, response);
+        response.setInterventi(tecnico.getInterventi());
+        response.setAziendaId(tecnico.getAzienda().getId());
+
+        return response;
+
+    }
+
     public void delete(Long id) {
         Tecnico tecnico = findById(id);
         tecnicoRepository.deleteById(id);
     }
+
+
+    public TecnicoResponse tecnicoResponseFromEntity(Tecnico tecnico){
+        TecnicoResponse response = new TecnicoResponse();
+        BeanUtils.copyProperties(tecnico, response);
+        return response;
+    }
+
+    public List<TecnicoResponse> tecnicoResponseListFromEntityList(List<Tecnico> tecnici){
+        return tecnici.stream().map(this::tecnicoResponseFromEntity).toList();
+    }
+
+    public Tecnico tecnicoFromRequest(TecnicoRequest request){
+        Tecnico tecnico = new Tecnico();
+        BeanUtils.copyProperties(request, tecnico);
+        return tecnico;
+    }
+
 
 }
