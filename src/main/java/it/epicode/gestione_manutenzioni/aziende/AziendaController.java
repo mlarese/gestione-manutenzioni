@@ -1,6 +1,7 @@
 package it.epicode.gestione_manutenzioni.aziende;
 
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +20,16 @@ public class AziendaController {
     // sortBy è una stringa contenenete il nome del campo su cui ordinare aggiungere
     // ',desc' per ordinare in modo decrescente esempio 'nome,desc'
     // esegue l'ordinamento in base al campo nome in ordine decrescente
+//    @GetMapping
+//    public Page<Azienda> findAll(@RequestParam int page, @RequestParam int recordPerPagina, @RequestParam String sortBy) {
+//        // trasformare questi parametri in un pageable esiste la classe PageRequest
+//        // che è quella deputata a creare il pageable
+//        Pageable pageable = PageRequest.of(page, recordPerPagina, Sort.by(sortBy));
+//        return aziendaService.findAll(pageable);
+//    }
+
     @GetMapping
-    private Page<Azienda> findAll(@RequestParam int page, @RequestParam int recordPerPagina, @RequestParam String sortBy) {
-        // trasformare questi parametri in un pageable esiste la classe PageRequest
-        // che è quella deputata a creare il pageable
-        Pageable pageable = PageRequest.of(page, recordPerPagina, Sort.by(sortBy));
+    public Page<Azienda> findAll(@ParameterObject Pageable pageable) {
         return aziendaService.findAll(pageable);
     }
 
