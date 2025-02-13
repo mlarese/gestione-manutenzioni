@@ -30,6 +30,7 @@ public class Tecnico {
     @Column(unique = true)
     private String codiceFiscale;
     private Boolean attivo=true;
+    private String email;
 
     @ManyToOne
     // per System.out

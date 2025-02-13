@@ -13,4 +13,5 @@ public class TecnicoRequest {
     private String matricola;
     private String codiceFiscale;
     private Long aziendaId;
+    private String email;
 }

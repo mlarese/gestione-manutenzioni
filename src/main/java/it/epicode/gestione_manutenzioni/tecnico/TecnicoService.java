@@ -52,8 +52,8 @@ public class TecnicoService {
 
         try {
             emailService.sendEmail(
-                    "pimafoy501@perceint.com", "Test invio", "Email di prova dopo inserimento tecnico "
-                            +tecnico.getNome());
+                    tecnico.getEmail(), "Conferma di registrazione", "Abbiamo registrato il tecnico  "
+                            +tecnico.getEmail()) ;
         } catch (MessagingException e) {
             System.out.println("Errore invio email");
         }
