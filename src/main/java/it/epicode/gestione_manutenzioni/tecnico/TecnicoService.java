@@ -1,6 +1,8 @@
 package it.epicode.gestione_manutenzioni.tecnico;
 
 import it.epicode.gestione_manutenzioni.general.responses.CreateResponse;
+import it.epicode.gestione_manutenzioni.mail.EmailService;
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TecnicoService {
     private final TecnicoRepository tecnicoRepository;
+    private final EmailService emailService;
 
     // metodo per trovare tutti i dipendenti
     public List<TecnicoResponse> findAll() {
@@ -31,7 +34,8 @@ public class TecnicoService {
     }
 
     //metodo per inserire un dipendente
-    public CreateResponse save(TecnicoRequest request) {
+    // invio una email di notifica per inserimento tecnico
+    public CreateResponse save(TecnicoRequest request)   {
         if(tecnicoRepository.existsByMatricola(request.getMatricola())){
             throw new EntityExistsException("Tecnico già esistente");
         }
@@ -42,8 +46,17 @@ public class TecnicoService {
 
         Tecnico tecnico = tecnicoFromRequest(request);
 
+        tecnicoRepository.save(tecnico);
         CreateResponse response = new CreateResponse();
         BeanUtils.copyProperties(tecnico, response);
+
+        try {
+            emailService.sendEmail(
+                    "pimafoy501@perceint.com", "Test invio", "Email di prova dopo inserimento tecnico "
+                            +tecnico.getNome());
+        } catch (MessagingException e) {
+            System.out.println("Errore invio email");
+        }
 
         return response;
 
