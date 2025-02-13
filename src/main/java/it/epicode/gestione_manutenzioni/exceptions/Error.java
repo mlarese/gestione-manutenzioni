@@ -1,4 +1,4 @@
-package it.epicode.gestione_manutenzioni.eceptions;
+package it.epicode.gestione_manutenzioni.exceptions;
 
 import lombok.Data;
 

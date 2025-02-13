@@ -5,19 +5,27 @@ import it.epicode.gestione_manutenzioni.mail.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class TecnicoService {
     private final TecnicoRepository tecnicoRepository;
     private final EmailService emailService;
+    @Value("${messages.new.tecnico.subject}")
+    private String newTecnicoSubject;
 
+    @Value("${messages.new.tecnico.body}")
+    private String newTecnicoBody;
     // metodo per trovare tutti i dipendenti
     public List<TecnicoResponse> findAll() {
         // trasforma la lista di tecnici recuperata con findAll
@@ -35,7 +43,8 @@ public class TecnicoService {
 
     //metodo per inserire un dipendente
     // invio una email di notifica per inserimento tecnico
-    public CreateResponse save(TecnicoRequest request)   {
+    public CreateResponse save(@Valid TecnicoRequest request)   {
+        System.out.println("Dentro service");
         if(tecnicoRepository.existsByMatricola(request.getMatricola())){
             throw new EntityExistsException("Tecnico già esistente");
         }
@@ -52,7 +61,7 @@ public class TecnicoService {
 
         try {
             emailService.sendEmail(
-                    tecnico.getEmail(), "Conferma di registrazione", "Abbiamo registrato il tecnico  "
+                    tecnico.getEmail(), newTecnicoSubject, newTecnicoBody + " "
                             +tecnico.getEmail()) ;
         } catch (MessagingException e) {
             System.out.println("Errore invio email");
