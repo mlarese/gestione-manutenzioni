@@ -39,6 +39,8 @@ public class ExceptionHandlerClass {
         Map<String, String> errors = new HashMap<>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             String fieldName = violation.getPropertyPath().toString();
+
+            //System.out.println(fieldName);
             if (fieldName.contains(".")) {
                 fieldName = fieldName.substring(fieldName.lastIndexOf('.') + 1);
             }

@@ -26,13 +26,14 @@ public class EmailService {
     public void sendEmail(String to, String subject, String body) throws MessagingException {
         if(body==null) body = "mail di default";
         MimeMessage message = mailSender.createMimeMessage();
+
         MimeMessageHelper helper = new MimeMessageHelper(message);
-        //SimpleMailMessage message = new SimpleMailMessage();
+
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(body, true);
         // con google non si può forzare l'indirizzo email di chi invia
-        helper.setFrom("your-email@gmail.com");
+        //helper.setFrom("your-email@gmail.com");
 
         mailSender.send(message);
         System.out.println("Email inviata con successo a " + to);

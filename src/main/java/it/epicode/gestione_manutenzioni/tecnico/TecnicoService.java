@@ -44,7 +44,7 @@ public class TecnicoService {
     //metodo per inserire un dipendente
     // invio una email di notifica per inserimento tecnico
     public CreateResponse save(@Valid TecnicoRequest request)   {
-        System.out.println("Dentro service");
+
         if(tecnicoRepository.existsByMatricola(request.getMatricola())){
             throw new EntityExistsException("Tecnico già esistente");
         }
@@ -61,9 +61,9 @@ public class TecnicoService {
 
         try {
             emailService.sendEmail(
-                    tecnico.getEmail(), newTecnicoSubject, newTecnicoBody + " "
+                    tecnico.getEmail(),newTecnicoSubject, "<h1>"+newTecnicoBody+"</h1><img src='https://res.cloudinary.com/dmc1dmdyo/image/upload/v1739439825/FS0824/paris.jpg.jpg'>"
                             +tecnico.getEmail()) ;
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             System.out.println("Errore invio email");
         }
 
